@@ -72,7 +72,12 @@ public class InsertBuilder {
 
         sqlStatement.append(") VALUES (");
 
-        IntStream.range(0, columnNamesAndValues.size()).forEach(i -> sqlStatement.append("?, "));
+        if (preparedStatement) {
+            IntStream.range(0, columnNamesAndValues.size()).forEach(i -> sqlStatement.append("?, "));
+        } else {
+            // use actual values.
+            columnNamesAndValues.values().forEach(val -> sqlStatement.append("'").append(val).append("', "));
+        }
 
         // Remove trailing comma
         sqlStatement.delete(sqlStatement.length() - 2, sqlStatement.length());

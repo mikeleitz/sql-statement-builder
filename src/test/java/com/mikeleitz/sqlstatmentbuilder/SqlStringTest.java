@@ -17,9 +17,21 @@ class SqlStringTest {
             .insertValue("name", "leitz")
             .build();
 
-        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlString());
+        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES ('leitz')", sqlStatement.getSqlString());
 
         Assertions.assertNotNull(sqlStatement.getColumnsAndValues());
         Assertions.assertEquals(1, sqlStatement.getColumnsAndValues().size());
+    }
+
+    @Test
+    public void testPreparedStatement() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .insert()
+            .preparedStatement()
+            .intoTable("users")
+            .insertValue("name", "leitz")
+            .build();
+
+        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlString());
     }
 }

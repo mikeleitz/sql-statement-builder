@@ -1,6 +1,5 @@
 package com.mikeleitz.sqlstatmentbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +23,7 @@ class SqlStringTest {
     }
 
     @Test
-    public void testPreparedStatement() {
+    public void preparedStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
             .preparedStatement()
@@ -33,5 +32,21 @@ class SqlStringTest {
             .build();
 
         Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlString());
+    }
+
+    @Test
+    public void select() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .select()
+            .preparedStatement()
+            .selectColumn("first_name")
+            .selectColumn("last_name")
+            .fromTable("users")
+            .where("id", 1)
+            .orderBy("last_name")
+            .build();
+
+        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ? ORDER BY LAST_NAME", sqlStatement.getSqlString());
+
     }
 }

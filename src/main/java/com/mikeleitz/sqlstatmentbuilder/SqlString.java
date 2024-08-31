@@ -20,6 +20,10 @@ public class SqlString {
         public InsertBuilder insert() {
             return new InsertBuilder(this);
         }
+
+        public SelectBuilder select() {
+            return new SelectBuilder();
+        }
     }
 
     public String getSqlString() {

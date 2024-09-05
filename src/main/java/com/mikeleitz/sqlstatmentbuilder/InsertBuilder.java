@@ -13,7 +13,6 @@ import java.util.stream.IntStream;
  * @author leitz@mikeleitz.com
  */
 public class InsertBuilder {
-    private boolean preparedStatement = false;
     private String tableName;
     private Map<String, Object> columnNamesAndValues = new TreeMap<>();
 
@@ -29,12 +28,7 @@ public class InsertBuilder {
         List<String> columnNames = columnNamesAndValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
         List<Object> columnValues = columnNamesAndValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
-        return new SqlString(createSqlString(), preparedStatement, columnNames, columnValues, null, null);
-    }
-
-    public InsertBuilder preparedStatement() {
-        preparedStatement = true;
-        return this;
+        return new SqlString(createSqlString(false), createSqlString(true), columnNames, columnValues, null, null);
     }
 
     public InsertBuilder intoTable(String tableName) {
@@ -52,7 +46,7 @@ public class InsertBuilder {
         return this;
     }
 
-    private String createSqlString() {
+    private String createSqlString(boolean preparedStatement) {
         // Create adapters to support other databases, where appropriate.
         StringBuilder sqlStatement = new StringBuilder();
 

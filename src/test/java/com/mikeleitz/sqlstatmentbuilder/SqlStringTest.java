@@ -16,7 +16,7 @@ class SqlStringTest {
             .insert("name", "leitz")
             .build();
 
-        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES ('leitz')", sqlStatement.getSqlString());
+        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES ('leitz')", sqlStatement.getSqlStatement());
 
         Assertions.assertNotNull(sqlStatement.getColumnNames());
         Assertions.assertNotNull(sqlStatement.getColumnValues());
@@ -28,19 +28,17 @@ class SqlStringTest {
     public void preparedStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
-            .preparedStatement()
             .intoTable("users")
             .insert("name", "leitz")
             .build();
 
-        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlString());
+        Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlPreparedStatement());
     }
 
     @Test
     public void select() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .select()
-            .preparedStatement()
             .column("first_name")
             .column("last_name")
             .fromTable("users")
@@ -48,7 +46,6 @@ class SqlStringTest {
             .orderBy("last_name")
             .build();
 
-        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ? ORDER BY LAST_NAME", sqlStatement.getSqlString());
-
+        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ? ORDER BY LAST_NAME", sqlStatement.getSqlPreparedStatement());
     }
 }

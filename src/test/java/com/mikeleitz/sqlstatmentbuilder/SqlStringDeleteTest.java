@@ -9,25 +9,14 @@ import org.junit.jupiter.api.Test;
  */
 public class SqlStringDeleteTest {
     @Test
-    public void deleteStatement() {
+    public void basicDeleteStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .delete()
             .fromTable("users")
             .where("id", 1)
             .build();
 
-        Assertions.assertEquals("DELETE FROM USERS WHERE ID = '1'", sqlStatement.getSqlString());
-    }
-
-    @Test
-    public void deletePreparedStatement() {
-        SqlString sqlStatement = new SqlString.SqlStringBuilder()
-            .delete()
-            .preparedStatement()
-            .fromTable("users")
-            .where("id", 1)
-            .build();
-
-        Assertions.assertEquals("DELETE FROM USERS WHERE ID = ?", sqlStatement.getSqlString());
+        Assertions.assertEquals("DELETE FROM USERS WHERE ID = '1'", sqlStatement.getSqlStatement());
+        Assertions.assertEquals("DELETE FROM USERS WHERE ID = ?", sqlStatement.getSqlPreparedStatement());
     }
 }

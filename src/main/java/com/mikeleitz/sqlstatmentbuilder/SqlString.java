@@ -8,37 +8,41 @@ import java.util.List;
  * @author leitz@mikeleitz.com
  */
 public class SqlString {
-    private final String sqlString;
-    private final boolean isPreparedStatement;
+    private final String sqlStatement;
+    private final String sqlPreparedStatement;
     private final List<String> columnNames;
     private final List<Object> columnValues;
     private final List<String> wherePredicate;
     private final List<Object> whereValues;
 
-    public SqlString(String sqlString, boolean isPreparedStatement) {
-        this.sqlString = sqlString;
+    public SqlString(String sqlStatement, String sqlPreparedStatement) {
+        this.sqlStatement = sqlStatement;
+        this.sqlPreparedStatement = sqlPreparedStatement;
         this.columnNames = null;
         this.columnValues = null;
         this.wherePredicate = null;
         this.whereValues = null;
-
-        this.isPreparedStatement = isPreparedStatement;
     }
 
-    public SqlString(String sqlString, boolean isPreparedStatement, List<String> columnNames, List<Object> columnValues, List<String> wherePredicate, List<Object> whereValues) {
-        this.sqlString = sqlString;
+    public SqlString(String sqlStatement, String sqlPreparedStatement, List<String> columnNames, List<Object> columnValues, List<String> wherePredicate, List<Object> whereValues) {
+        this.sqlStatement = sqlStatement;
+        this.sqlPreparedStatement = sqlPreparedStatement;
         this.columnNames = columnNames;
         this.columnValues = columnValues;
         this.wherePredicate = wherePredicate;
         this.whereValues = whereValues;
-
-        this.isPreparedStatement = isPreparedStatement;
     }
 
+    /**
+     * Collects and returns a combined list of all bind parameters from the object's column values and where values.
+     * If column values and where values do not exist, null is returned.
+     *
+     * @return a list of bind parameters containing both column values and where values, or null if column values and where values do not exist.
+     */
     public List<Object> getAllBindParameters() {
         List<Object> allBindParameters = new ArrayList<>();
 
-        if (columnValues != null && whereValues == null) {
+        if (columnValues == null && whereValues == null) {
             return null;
         }
 
@@ -53,12 +57,12 @@ public class SqlString {
         return allBindParameters;
     }
 
-    public String getSqlString() {
-        return sqlString;
+    public String getSqlStatement() {
+        return sqlStatement;
     }
 
-    public boolean isPreparedStatement() {
-        return isPreparedStatement;
+    public String getSqlPreparedStatement() {
+        return sqlPreparedStatement;
     }
 
     public List<String> getColumnNames() {
@@ -80,8 +84,8 @@ public class SqlString {
     @Override
     public String toString() {
         return "SqlString{" +
-            "sqlString='" + sqlString + '\'' +
-            ", isPreparedStatement=" + isPreparedStatement +
+            "sqlStatement='" + sqlStatement + '\'' +
+            ", sqlPreparedStatement='" + sqlPreparedStatement + '\'' +
             ", columnNames=" + columnNames +
             ", columnValues=" + columnValues +
             ", wherePredicate=" + wherePredicate +

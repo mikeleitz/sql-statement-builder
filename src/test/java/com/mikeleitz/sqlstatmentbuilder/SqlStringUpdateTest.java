@@ -18,20 +18,7 @@ public class SqlStringUpdateTest {
             .where("id", 1)
             .build();
 
-        Assertions.assertEquals("UPDATE USERS SET FIRST_NAME = 'mike', LAST_NAME = 'leitz' WHERE ID = '1'", sqlStatement.getSqlString());
-    }
-
-    @Test
-    public void updatePreparedStatement() {
-        SqlString sqlStatement = new SqlString.SqlStringBuilder()
-            .update()
-            .preparedStatement()
-            .update("first_name", "mike")
-            .update("last_name", "leitz")
-            .table("users")
-            .where("id", 1)
-            .build();
-
-        Assertions.assertEquals("UPDATE USERS SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?", sqlStatement.getSqlString());
+        Assertions.assertEquals("UPDATE USERS SET FIRST_NAME = 'mike', LAST_NAME = 'leitz' WHERE ID = '1'", sqlStatement.getSqlStatement());
+        Assertions.assertEquals("UPDATE USERS SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?", sqlStatement.getSqlPreparedStatement());
     }
 }

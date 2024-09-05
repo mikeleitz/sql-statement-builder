@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  */
 public class SqlStringInsertTest {
     @Test
-    public void insertStatement() {
+    public void basicInsertStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
             .insert("first_name", "mike")
@@ -17,19 +17,7 @@ public class SqlStringInsertTest {
             .intoTable("users")
             .build();
 
-        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES ('mike', 'leitz')", sqlStatement.getSqlString());
-    }
-
-    @Test
-    public void insertPreparedStatement() {
-        SqlString sqlStatement = new SqlString.SqlStringBuilder()
-            .insert()
-            .preparedStatement()
-            .insert("first_name", "mike")
-            .insert("last_name", "leitz")
-            .intoTable("users")
-            .build();
-
-        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES (?, ?)", sqlStatement.getSqlString());
+        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES ('mike', 'leitz')", sqlStatement.getSqlStatement());
+        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES (?, ?)", sqlStatement.getSqlPreparedStatement());
     }
 }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  */
 public class SqlStringSelectTest {
     @Test
-    public void selectStatement() {
+    public void basicSelectStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .select()
             .column("first_name")
@@ -19,21 +19,7 @@ public class SqlStringSelectTest {
             .orderBy("last_name")
             .build();
 
-        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = '1' ORDER BY LAST_NAME", sqlStatement.getSqlString());
-    }
-
-    @Test
-    public void selectPreparedStatement() {
-        SqlString sqlStatement = new SqlString.SqlStringBuilder()
-            .select()
-            .preparedStatement()
-            .column("first_name")
-            .column("last_name")
-            .fromTable("users")
-            .where("id", 1)
-            .orderBy("last_name")
-            .build();
-
-        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ? ORDER BY LAST_NAME", sqlStatement.getSqlString());
+        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = '1' ORDER BY LAST_NAME", sqlStatement.getSqlStatement());
+        Assertions.assertEquals("SELECT FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ? ORDER BY LAST_NAME", sqlStatement.getSqlPreparedStatement());
     }
 }

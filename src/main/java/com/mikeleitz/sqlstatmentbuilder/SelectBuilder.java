@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * @author leitz@mikeleitz.com
  */
 public class SelectBuilder {
-    private boolean preparedStatement = false;
     private String tableName;
 
     private List<String> columns = new ArrayList<>();
@@ -29,18 +28,13 @@ public class SelectBuilder {
         }
 
         if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
-            return new SqlString(createSqlString(), preparedStatement, columns, null, null, null);
+            return new SqlString(createSqlString(false), createSqlString(true), columns, null, null, null);
         } else {
             List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
             List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
-            return new SqlString(createSqlString(), preparedStatement, columns, null, whereColumnNames, whereColumnValues);
+            return new SqlString(createSqlString(false), createSqlString(true), columns, null, whereColumnNames, whereColumnValues);
         }
-    }
-
-    public SelectBuilder preparedStatement() {
-        preparedStatement = true;
-        return this;
     }
 
     public SelectBuilder fromTable(String tableName) {
@@ -73,7 +67,7 @@ public class SelectBuilder {
         return this;
     }
 
-    private String createSqlString() {
+    private String createSqlString(boolean preparedStatement) {
         StringBuilder sqlStatement = new StringBuilder();
 
         sqlStatement.append("SELECT ");

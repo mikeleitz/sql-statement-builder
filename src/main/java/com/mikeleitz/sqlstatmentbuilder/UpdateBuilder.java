@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * @author leitz@mikeleitz.com
  */
 public class UpdateBuilder {
-    private boolean preparedStatement = false;
     private String tableName;
 
     private Map<String, Object> columnNamesAndValues = new TreeMap<>();
@@ -31,18 +30,13 @@ public class UpdateBuilder {
         List<Object> columnValues = columnNamesAndValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
         if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
-            return new SqlString(createSqlString(), preparedStatement, columnNames, columnValues, null, null);
+            return new SqlString(createSqlString(false), createSqlString(true), columnNames, columnValues, null, null);
         } else {
             List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
             List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
-            return new SqlString(createSqlString(), preparedStatement, columnNames, columnValues, whereColumnNames, whereColumnValues);
+            return new SqlString(createSqlString(false), createSqlString(true), columnNames, columnValues, whereColumnNames, whereColumnValues);
         }
-    }
-
-    public UpdateBuilder preparedStatement() {
-        preparedStatement = true;
-        return this;
     }
 
     public UpdateBuilder update(String columnName, Object value) {
@@ -70,7 +64,7 @@ public class UpdateBuilder {
         return this;
     }
 
-    private String createSqlString() {
+    private String createSqlString(boolean preparedStatement) {
         StringBuilder sqlStatement = new StringBuilder();
 
         sqlStatement.append("UPDATE ");

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
  * @author leitz@mikeleitz.com
  */
 public class DeleteBuilder {
-    private boolean preparedStatement = false;
     private String tableName;
 
     private final Map<String, Object> whereColumnPredicates = new TreeMap<>();
@@ -20,18 +19,13 @@ public class DeleteBuilder {
         }
 
         if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
-            return new SqlString(createSqlString(), preparedStatement);
+            return new SqlString(createSqlString(false), createSqlString(true));
         } else {
             List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
             List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
-            return new SqlString(createSqlString(), preparedStatement, null, null, whereColumnNames, whereColumnValues);
+            return new SqlString(createSqlString(false), createSqlString(true), null, null, whereColumnNames, whereColumnValues);
         }
-    }
-
-    public DeleteBuilder preparedStatement() {
-        preparedStatement = true;
-        return this;
     }
 
     public DeleteBuilder fromTable(String tableName) {
@@ -49,7 +43,7 @@ public class DeleteBuilder {
         return this;
     }
 
-    private String createSqlString() {
+    private String createSqlString(boolean preparedStatement) {
         StringBuilder sqlStatement = new StringBuilder();
 
         sqlStatement.append("DELETE FROM ");

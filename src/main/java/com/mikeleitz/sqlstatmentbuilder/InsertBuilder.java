@@ -31,7 +31,7 @@ public class InsertBuilder {
         return this;
     }
 
-    public InsertBuilder insertValue(String columnName, Object value) {
+    public InsertBuilder insert(String columnName, Object value) {
         columnNamesAndValues.put(columnName, value);
         return this;
     }

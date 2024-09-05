@@ -12,8 +12,8 @@ public class SqlStringInsertTest {
     public void insertStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
-            .insertValue("first_name", "mike")
-            .insertValue("last_name", "leitz")
+            .insert("first_name", "mike")
+            .insert("last_name", "leitz")
             .intoTable("users")
             .build();
 
@@ -25,8 +25,8 @@ public class SqlStringInsertTest {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
             .preparedStatement()
-            .insertValue("first_name", "mike")
-            .insertValue("last_name", "leitz")
+            .insert("first_name", "mike")
+            .insert("last_name", "leitz")
             .intoTable("users")
             .build();
 

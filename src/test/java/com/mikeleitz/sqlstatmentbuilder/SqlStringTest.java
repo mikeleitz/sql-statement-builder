@@ -13,7 +13,7 @@ class SqlStringTest {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .insert()
             .intoTable("users")
-            .insertValue("name", "leitz")
+            .insert("name", "leitz")
             .build();
 
         Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES ('leitz')", sqlStatement.getSqlString());
@@ -28,7 +28,7 @@ class SqlStringTest {
             .insert()
             .preparedStatement()
             .intoTable("users")
-            .insertValue("name", "leitz")
+            .insert("name", "leitz")
             .build();
 
         Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES (?)", sqlStatement.getSqlString());
@@ -39,8 +39,8 @@ class SqlStringTest {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .select()
             .preparedStatement()
-            .selectColumn("first_name")
-            .selectColumn("last_name")
+            .column("first_name")
+            .column("last_name")
             .fromTable("users")
             .where("id", 1)
             .orderBy("last_name")

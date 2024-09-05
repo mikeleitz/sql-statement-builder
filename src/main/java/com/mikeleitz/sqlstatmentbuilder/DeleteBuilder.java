@@ -25,7 +25,7 @@ public class DeleteBuilder {
         preparedStatement = true;
         return this;
     }
-    public DeleteBuilder table(String tableName) {
+    public DeleteBuilder fromTable(String tableName) {
         this.tableName = tableName;
         return this;
     }

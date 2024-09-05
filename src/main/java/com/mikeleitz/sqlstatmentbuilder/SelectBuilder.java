@@ -28,7 +28,7 @@ public class SelectBuilder {
         return this;
     }
 
-    public SelectBuilder selectColumn(String column) {
+    public SelectBuilder column(String column) {
         columns.add(column);
         return this;
     }

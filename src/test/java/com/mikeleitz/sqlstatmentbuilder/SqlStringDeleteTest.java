@@ -12,7 +12,7 @@ public class SqlStringDeleteTest {
     public void deleteStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .delete()
-            .table("users")
+            .fromTable("users")
             .where("id", 1)
             .build();
 
@@ -24,7 +24,7 @@ public class SqlStringDeleteTest {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .delete()
             .preparedStatement()
-            .table("users")
+            .fromTable("users")
             .where("id", 1)
             .build();
 

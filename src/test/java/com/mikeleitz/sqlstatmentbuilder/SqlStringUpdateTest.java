@@ -12,8 +12,8 @@ public class SqlStringUpdateTest {
     public void updateStatement() {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .update()
-            .updateValue("first_name", "mike")
-            .updateValue("last_name", "leitz")
+            .update("first_name", "mike")
+            .update("last_name", "leitz")
             .table("users")
             .where("id", 1)
             .build();
@@ -26,8 +26,8 @@ public class SqlStringUpdateTest {
         SqlString sqlStatement = new SqlString.SqlStringBuilder()
             .update()
             .preparedStatement()
-            .updateValue("first_name", "mike")
-            .updateValue("last_name", "leitz")
+            .update("first_name", "mike")
+            .update("last_name", "leitz")
             .table("users")
             .where("id", 1)
             .build();

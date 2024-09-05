@@ -33,7 +33,7 @@ public class UpdateBuilder {
         return this;
     }
 
-    public UpdateBuilder updateValue(String columnName, Object value) {
+    public UpdateBuilder update(String columnName, Object value) {
         columnNamesAndValues.put(columnName, value);
         return this;
     }
@@ -43,7 +43,7 @@ public class UpdateBuilder {
         return this;
     }
 
-    public UpdateBuilder updateValue(Map<String, Object> columnNamesAndValues) {
+    public UpdateBuilder update(Map<String, Object> columnNamesAndValues) {
         columnNamesAndValues.putAll(columnNamesAndValues);
         return this;
     }

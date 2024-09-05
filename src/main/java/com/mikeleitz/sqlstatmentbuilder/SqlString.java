@@ -28,6 +28,10 @@ public class SqlString {
         public UpdateBuilder update() {
             return new UpdateBuilder();
         }
+
+        public DeleteBuilder delete() {
+            return new DeleteBuilder();
+        }
     }
 
     public String getSqlString() {

@@ -57,26 +57,56 @@ public class SqlString {
         return allBindParameters;
     }
 
+    /**
+     * Retrieves the full SQL statement with all values specified as a string.
+     *
+     * @return the SQL statement.
+     */
     public String getSqlStatement() {
         return sqlStatement;
     }
 
+    /**
+     * Retrieves the SQL prepared statement with parameter placeholders.
+     *
+     * @return the SQL prepared statement.
+     */
     public String getSqlPreparedStatement() {
         return sqlPreparedStatement;
     }
 
+    /**
+     * Retrieves the list of column names associated with the SQL statement.
+     *
+     * @return a list of column names.
+     */
     public List<String> getColumnNames() {
         return columnNames;
     }
 
+    /**
+     * Retrieves the list of column values associated with the SQL statement.
+     * For statements like insert/update.
+     * @return a list of column values.
+     */
     public List<Object> getColumnValues() {
         return columnValues;
     }
 
+    /**
+     * Retrieves the list of predicates used in the WHERE clause of the SQL statement.
+     *
+     * @return a list of predicates for the WHERE clause.
+     */
     public List<String> getWherePredicate() {
         return wherePredicate;
     }
 
+    /**
+     * Retrieves the list of values used in the WHERE clause of the SQL statement.
+     *
+     * @return a list of values for the WHERE clause.
+     */
     public List<Object> getWhereValues() {
         return whereValues;
     }

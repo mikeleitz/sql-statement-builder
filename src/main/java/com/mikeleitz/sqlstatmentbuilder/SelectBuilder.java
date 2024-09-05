@@ -96,12 +96,12 @@ public class SelectBuilder {
                     }
                 );
 
-            sqlStatement.delete(sqlStatement.length() - 4, sqlStatement.length());
+            sqlStatement.delete(sqlStatement.length() - 5, sqlStatement.length());
         }
 
         if (orderBy != null && !orderBy.isEmpty()) {
-            sqlStatement.append("ORDER BY ");
-            orderBy.forEach(element -> sqlStatement.append(element.toUpperCase()).append(" ,"));
+            sqlStatement.append(" ORDER BY ");
+            orderBy.forEach(element -> sqlStatement.append(element.toUpperCase()).append(", "));
             sqlStatement.delete(sqlStatement.length() - 2, sqlStatement.length());
         }
 

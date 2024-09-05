@@ -20,4 +20,45 @@ public class SqlStringInsertTest {
         Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES ('mike', 'leitz')", sqlStatement.getSqlStatement());
         Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME, LAST_NAME) VALUES (?, ?)", sqlStatement.getSqlPreparedStatement());
     }
+
+    @Test
+    public void oneColumnInsertStatement() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .insert()
+            .insert("first_name", "mike")
+            .intoTable("users")
+            .build();
+
+        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME) VALUES ('mike')", sqlStatement.getSqlStatement());
+        Assertions.assertEquals("INSERT INTO USERS (FIRST_NAME) VALUES (?)", sqlStatement.getSqlPreparedStatement());
+    }
+
+    @Test
+    public void noTableSpecifiedException() {
+        try {
+            SqlString sqlStatement = new SqlString.SqlStringBuilder()
+                .insert()
+                .insert("first_name", "mike")
+                .insert("last_name", "leitz")
+                .build();
+        } catch (UnableToCreateSqlStatementException e) {
+            return;
+        }
+
+        Assertions.fail("Expecting UnableToCreateSqlStatementException exception.");
+    }
+
+    @Test
+    public void noInsertColumnsSpecifiedException() {
+        try {
+            SqlString sqlStatement = new SqlString.SqlStringBuilder()
+                .insert()
+                .intoTable("users")
+                .build();
+        } catch (UnableToCreateSqlStatementException e) {
+            return;
+        }
+
+        Assertions.fail("Expecting UnableToCreateSqlStatementException exception.");
+    }
 }

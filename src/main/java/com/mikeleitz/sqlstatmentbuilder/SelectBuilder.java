@@ -82,10 +82,17 @@ public class SelectBuilder {
         if (whereColumnPredicates != null && !whereColumnPredicates.isEmpty()) {
             sqlStatement.append(" WHERE ");
             whereColumnPredicates
-                .keySet()
+                .entrySet()
                 .stream()
                 .sorted()
-                .forEach(element -> sqlStatement.append(element.toUpperCase()).append(" = ? AND "));
+                .forEach(entry -> {
+                        if (preparedStatement) {
+                            sqlStatement.append(entry.getKey().toUpperCase()).append(" = ? AND ");
+                        } else {
+                            sqlStatement.append(entry.getKey().toUpperCase()).append(" = '").append(entry.getValue()).append("' AND ");
+                        }
+                    }
+                );
 
             sqlStatement.delete(sqlStatement.length() - 4, sqlStatement.length());
         }

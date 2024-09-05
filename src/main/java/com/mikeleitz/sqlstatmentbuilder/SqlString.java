@@ -24,6 +24,10 @@ public class SqlString {
         public SelectBuilder select() {
             return new SelectBuilder();
         }
+
+        public UpdateBuilder update() {
+            return new UpdateBuilder();
+        }
     }
 
     public String getSqlString() {

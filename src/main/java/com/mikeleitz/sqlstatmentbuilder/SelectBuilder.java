@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * @author leitz@mikeleitz.com
@@ -17,6 +18,25 @@ public class SelectBuilder {
     private List<String> columns = new ArrayList<>();
     private Map<String, Object> whereColumnPredicates = new TreeMap<>();
     private List<String> orderBy = new ArrayList<>();
+
+    public SqlString build() {
+        if (tableName == null || tableName.trim().isEmpty()) {
+            throw new UnableToCreateSqlStatementException("tableName is required to create SQL statement");
+        }
+
+        if (columns == null || columns.isEmpty()) {
+            throw new UnableToCreateSqlStatementException("add one or more columns and values to create SQL insert statement");
+        }
+
+        if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
+            return new SqlString(createSqlString(), preparedStatement, columns, null, null, null);
+        } else {
+            List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
+            List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
+
+            return new SqlString(createSqlString(), preparedStatement, columns, null, whereColumnNames, whereColumnValues);
+        }
+    }
 
     public SelectBuilder preparedStatement() {
         preparedStatement = true;
@@ -51,18 +71,6 @@ public class SelectBuilder {
     public SelectBuilder orderBy(List<String> columnNames) {
         orderBy.addAll(columnNames);
         return this;
-    }
-
-    public SqlString build() {
-        if (tableName == null || tableName.trim().length() == 0) {
-            throw new UnableToCreateSqlStatementException("tableName is required to create SQL statement");
-        }
-
-        if (columns == null || columns.isEmpty()) {
-            throw new UnableToCreateSqlStatementException("add one or more columns and values to create SQL insert statement");
-        }
-
-        return new SqlString(createSqlString(), null);
     }
 
     private String createSqlString() {

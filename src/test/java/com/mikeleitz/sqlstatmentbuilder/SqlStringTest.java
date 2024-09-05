@@ -18,8 +18,10 @@ class SqlStringTest {
 
         Assertions.assertEquals("INSERT INTO USERS (NAME) VALUES ('leitz')", sqlStatement.getSqlString());
 
-        Assertions.assertNotNull(sqlStatement.getColumnsAndValues());
-        Assertions.assertEquals(1, sqlStatement.getColumnsAndValues().size());
+        Assertions.assertNotNull(sqlStatement.getColumnNames());
+        Assertions.assertNotNull(sqlStatement.getColumnValues());
+        Assertions.assertEquals(1, sqlStatement.getColumnNames().size());
+        Assertions.assertEquals(1, sqlStatement.getColumnValues().size());
     }
 
     @Test

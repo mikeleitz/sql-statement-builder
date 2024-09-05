@@ -1,8 +1,9 @@
 package com.mikeleitz.sqlstatmentbuilder;
 
-
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * @author leitz@mikeleitz.com
@@ -11,20 +12,28 @@ public class DeleteBuilder {
     private boolean preparedStatement = false;
     private String tableName;
 
-    private Map<String, Object> whereColumnPredicates = new TreeMap<>();
+    private final Map<String, Object> whereColumnPredicates = new TreeMap<>();
 
     public SqlString build() {
-        if (tableName == null || tableName.trim().length() == 0) {
+        if (tableName == null || tableName.trim().isEmpty()) {
             throw new UnableToCreateSqlStatementException("tableName is required to create SQL statement");
         }
 
-        return new SqlString(createSqlString(), null);
+        if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
+            return new SqlString(createSqlString(), preparedStatement);
+        } else {
+            List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
+            List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
+
+            return new SqlString(createSqlString(), preparedStatement, null, null, whereColumnNames, whereColumnValues);
+        }
     }
 
     public DeleteBuilder preparedStatement() {
         preparedStatement = true;
         return this;
     }
+
     public DeleteBuilder fromTable(String tableName) {
         this.tableName = tableName;
         return this;

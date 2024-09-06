@@ -1,13 +1,21 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'maven-publish'
+    id 'signing'
 }
 
-group = 'com.mikeleitz.sqlstatmentbuilder'
-version = '1.0-SNAPSHOT'
+group = 'com.mikeleitz'
+version = '0.0.1'
+description = "A jar library for creating sql strings using the builder pattern."
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
 }
 
 dependencies {
@@ -19,7 +27,48 @@ test {
     useJUnitPlatform()
 }
 
+signing {
+    sign publishing.publications
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
 publishing {
+    publications {
+        myPublication(MavenPublication) {
+            groupId = 'com.mikeleitz'
+            artifactId = 'sqlstatmentbuilder'
+            version = '0.0.1'
+            from components.java
+
+            artifact sourceJar
+
+            pom {
+                name = "sql-statement-builder"
+                description = "A jar library for creating sql strings using the builder pattern."
+                url = "https://www.mikeleitz.com/sql-statement-builder"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "mleitz1"
+                        name = "leitz"
+                        email = "leitz@mikeleitz.com"
+                    }
+                }
+                scm {
+                    url = "https://github.com/mikeleitz/sql-statement-builder.git"
+                }
+            }
+        }
+    }
     repositories {
         maven {
             name = "OSSRH"

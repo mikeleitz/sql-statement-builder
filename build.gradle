@@ -2,11 +2,10 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'signing'
 }
 
-group = 'mikeleitz'
-version = '0.0.2'
+group = 'com.mikeleitz'
+version = '0.0.8'
 description = "A jar library for creating sql strings using the builder pattern."
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,16 +40,11 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/")
+            url = "https://maven.pkg.github.com/mikeleitz/sql-statement-builder"
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+                username = System.getenv("GH_USERNAME")
+                password = System.getenv("GH_TOKEN")
             }
         }
     }
-}
-
-signing {
-    useInMemoryPgpKeys(System.getenv("GPG_PRIVATE_KEY"), System.getenv("GPG_PASSPHRASE"))
-    sign publishing.publications.mavenJava
 }

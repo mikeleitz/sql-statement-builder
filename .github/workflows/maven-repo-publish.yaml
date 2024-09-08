@@ -46,4 +46,4 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           USERNAME: ${{ github.actor }}
-        run: ./gradlew publish --max-workers=1
+        run: ./gradlew --stacktrace publish --max-workers=1

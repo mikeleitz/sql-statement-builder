@@ -5,7 +5,7 @@ plugins {
     id 'signing'
 }
 
-group = 'sql-statement-builder'
+group = 'mikeleitz'
 version = '0.0.2'
 description = "A jar library for creating sql strings using the builder pattern."
 
@@ -41,7 +41,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mikeleitz/sql-statement-builder")
+            url = uri("https://maven.pkg.github.com/")
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
                 password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")

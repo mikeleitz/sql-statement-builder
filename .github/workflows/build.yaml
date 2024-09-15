@@ -1,4 +1,4 @@
-name: Build
+name: Run Gradle build on every push
 
 on:
   push:

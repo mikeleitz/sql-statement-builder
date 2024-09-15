@@ -23,16 +23,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-build-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-build
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -43,8 +33,7 @@ jobs:
         env:
           GH_USERNAME: ${{ secrets.GH_USERNAME }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           USERNAME: ${{ github.actor }}
-        run: ./gradlew --stacktrace publish --max-workers=1
+        run: ./gradlew publish

@@ -79,4 +79,57 @@ public class SqlStringSelectTest {
 
         Assertions.fail("Expecting UnableToCreateSqlStatementException exception.");
     }
+
+    @Test
+    public void countOnly() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .select()
+            .count("first_name")
+            .fromTable("users")
+            .where("id", 1)
+            .build();
+
+        Assertions.assertEquals("SELECT COUNT(FIRST_NAME) FROM USERS WHERE ID = ?", sqlStatement.getSqlPreparedStatement());
+    }
+
+    @Test
+    public void countStar() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .select()
+            .count("*")
+            .fromTable("users")
+            .where("id", 1)
+            .build();
+
+        Assertions.assertEquals("SELECT COUNT(*) FROM USERS WHERE ID = ?", sqlStatement.getSqlPreparedStatement());
+    }
+
+    @Test
+    public void countWithMultipleSelectColumns() {
+        SqlString sqlStatement = new SqlString.SqlStringBuilder()
+            .select()
+            .column("first_name")
+            .column("last_name")
+            .count("*")
+            .fromTable("users")
+            .where("id", 1)
+            .build();
+
+        Assertions.assertEquals("SELECT COUNT(*), FIRST_NAME, LAST_NAME FROM USERS WHERE ID = ?", sqlStatement.getSqlPreparedStatement());
+    }
+
+    @Test
+    public void moreThanOneCountColumn() {
+        try {
+            SqlString sqlStatement = new SqlString.SqlStringBuilder()
+                .select()
+                .count("first_name")
+                .count("last_name")
+                .build();
+        } catch (UnableToCreateSqlStatementException e) {
+            return;
+        }
+
+        Assertions.fail("Expecting UnableToCreateSqlStatementException exception.");
+    }
 }

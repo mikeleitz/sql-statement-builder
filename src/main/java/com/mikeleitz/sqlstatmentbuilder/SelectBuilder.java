@@ -4,7 +4,6 @@ package com.mikeleitz.sqlstatmentbuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 public class SelectBuilder {
     private String tableName;
 
-    private List<String> columns = new ArrayList<>();
+    private Map<String, Boolean> columnsAndIfTheyAreCountColumns = new TreeMap<>();
     private Map<String, Object> whereColumnPredicates = new TreeMap<>();
     private List<String> orderBy = new ArrayList<>();
 
@@ -23,17 +22,17 @@ public class SelectBuilder {
             throw new UnableToCreateSqlStatementException("tableName is required to create SQL statement");
         }
 
-        if (columns == null || columns.isEmpty()) {
+        if (columnsAndIfTheyAreCountColumns.isEmpty()) {
             throw new UnableToCreateSqlStatementException("add one or more columns and values to create SQL insert statement");
         }
 
         if (whereColumnPredicates == null || whereColumnPredicates.isEmpty()) {
-            return new SqlString(createSqlString(false), createSqlString(true), columns, null, null, null);
+            return new SqlString(createSqlString(false), createSqlString(true), columnsAndIfTheyAreCountColumns.keySet().stream().collect(Collectors.toList()), null, null, null);
         } else {
             List<String> whereColumnNames = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
             List<Object> whereColumnValues = whereColumnPredicates.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(Collectors.toList());
 
-            return new SqlString(createSqlString(false), createSqlString(true), columns, null, whereColumnNames, whereColumnValues);
+            return new SqlString(createSqlString(false), createSqlString(true), columnsAndIfTheyAreCountColumns.keySet().stream().collect(Collectors.toList()), null, whereColumnNames, whereColumnValues);
         }
     }
 
@@ -42,8 +41,23 @@ public class SelectBuilder {
         return this;
     }
 
+    public SelectBuilder count(String column) {
+        // Can only have one column with count = true
+        long totalColumnsCounting = columnsAndIfTheyAreCountColumns.values()
+            .stream()
+            .filter(b -> b)
+            .count();
+
+        if (totalColumnsCounting > 0) {
+            throw new UnableToCreateSqlStatementException("Can only count one column per select statement");
+        }
+
+        columnsAndIfTheyAreCountColumns.put(column, true);
+        return this;
+    }
+
     public SelectBuilder column(String column) {
-        columns.add(column);
+        columnsAndIfTheyAreCountColumns.put(column, false);
         return this;
     }
 
@@ -72,10 +86,19 @@ public class SelectBuilder {
 
         sqlStatement.append("SELECT ");
 
-        Optional.ofNullable(columns)
+        //List<String> columnNames = columnNamesAndValues.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getKey()).collect(Collectors.toList());
+
+        columnsAndIfTheyAreCountColumns.entrySet()
             .stream()
-            .flatMap(List::stream)
-            .forEach(col -> sqlStatement.append(col.toUpperCase()).append(", "));
+            .forEach(entry ->
+                {
+                    if (entry.getValue()) {
+                        sqlStatement.append("COUNT(").append(entry.getKey().toUpperCase()).append("), ");
+                    } else {
+                        sqlStatement.append(entry.getKey().toUpperCase()).append(", ");
+                    }
+                }
+            );
         sqlStatement.delete(sqlStatement.length() - 2, sqlStatement.length());
 
         sqlStatement.append(" FROM ");

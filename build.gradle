@@ -5,10 +5,10 @@ plugins {
 }
 
 group = 'com.mikeleitz'
-version = '0.0.2-SNAPSHOT'
+version = '0.0.2'
 description = "A jar library for creating sql strings using the builder pattern."
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_1_9
 
 repositories {
     mavenCentral()
